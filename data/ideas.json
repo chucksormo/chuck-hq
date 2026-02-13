@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "id": "1",
+    "title": "AI Faktura/Regnskap for norske frilansere",
+    "description": "Drept. For tynt som standalone — Fiken har gratis fakturering. Ingen ekte moat, hvem som helst kan vibe-kode en faktura-generator. Regnskapssystem er for stort å bygge.",
+    "status": "killed",
+    "scores": {
+      "moat": 1,
+      "aiDriftbar": 5,
+      "revenue": 2,
+      "passiv": 4,
+      "speed": 5,
+      "fit": 5,
+      "glede": 2
+    },
+    "pros": ["Norsk marked"],
+    "cons": ["Fiken har gratis fakturering", "Null moat — kan vibe-kodes av hvem som helst", "For tynt standalone, for stort som regnskapssystem"],
+    "nextSteps": [],
+    "createdAt": "2026-02-13T13:40:00"
+  },
+  {
+    "id": "2",
+    "title": "GymCrush — Gym Dating App",
+    "description": "Dating-app hvor du velger gym-senteret ditt og kan swipe på folk som trener der. Parked — dating app fatigue er real, vanskelig å få kritisk masse.",
+    "status": "parked",
+    "scores": {
+      "moat": 4,
+      "aiDriftbar": 4,
+      "revenue": 4,
+      "passiv": 3,
+      "speed": 4,
+      "fit": 4,
+      "glede": 5
+    },
+    "pros": ["Viralt konsept", "Nettverkseffekt", "Uavhengig av gym-kjeder"],
+    "cons": ["Dating app fatigue", "Trenger kritisk masse", "Brutalt marked"],
+    "nextSteps": [],
+    "createdAt": "2026-02-13T15:06:00"
+  }
+]

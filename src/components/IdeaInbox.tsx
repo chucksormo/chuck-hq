@@ -3,6 +3,7 @@ import type { Idea } from '../types'
 
 interface Props {
   ideas: Idea[]
+  onAddIdea: (title: string) => Promise<void>
 }
 
 const statusColors: Record<string, string> = {
@@ -25,32 +26,42 @@ const scoreLabels: Record<string, string> = {
 
 function totalScore(scores: Idea['scores']): number {
   const values = Object.values(scores)
+  if (values.length === 0) return 0
   return Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 10)
 }
 
 function ScoreBar({ label, value }: { label: string; value: number }) {
-  const color = value >= 7 ? 'bg-success' : value >= 5 ? 'bg-amber' : 'bg-danger/70'
+  const color = value >= 7 ? 'bg-success' : value >= 5 ? 'bg-amber' : value > 0 ? 'bg-danger/70' : 'bg-stark-600'
   return (
     <div className="flex items-center gap-2">
       <span className="text-[10px] text-gray-400 w-14 text-right uppercase">{label}</span>
       <div className="flex-1 h-1.5 bg-stark-700 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${value * 10}%` }} />
+        <div className={`h-full rounded-full transition-all duration-500 ${color}`} style={{ width: `${value * 10}%` }} />
       </div>
       <span className="text-[10px] font-[JetBrains_Mono] text-gray-500 w-4">{value}</span>
     </div>
   )
 }
 
-export default function IdeaInbox({ ideas }: Props) {
+export default function IdeaInbox({ ideas, onAddIdea }: Props) {
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [filter, setFilter] = useState<string>('all')
   const [inputValue, setInputValue] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   const filtered = ideas
     .filter((i) => filter === 'all' || i.status === filter)
     .sort((a, b) => totalScore(b.scores) - totalScore(a.scores))
 
   const statuses = ['all', 'new', 'evaluating', 'active', 'parked', 'killed']
+
+  async function handleSubmit() {
+    if (!inputValue.trim() || submitting) return
+    setSubmitting(true)
+    await onAddIdea(inputValue.trim())
+    setInputValue('')
+    setSubmitting(false)
+  }
 
   return (
     <section className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
@@ -70,13 +81,16 @@ export default function IdeaInbox({ ideas }: Props) {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Drop an idea..."
           className="flex-1 bg-transparent outline-none text-sm text-gray-200 placeholder-gray-600"
+          disabled={submitting}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && inputValue.trim()) {
-              setInputValue('')
-            }
+            if (e.key === 'Enter') handleSubmit()
           }}
         />
-        <span className="text-[10px] text-gray-600 hidden sm:block">ENTER ↵</span>
+        {submitting ? (
+          <div className="w-3 h-3 rounded-full bg-arc animate-pulse" />
+        ) : (
+          <span className="text-[10px] text-gray-600 hidden sm:block">ENTER ↵</span>
+        )}
       </div>
 
       {/* Filters */}
@@ -98,6 +112,11 @@ export default function IdeaInbox({ ideas }: Props) {
 
       {/* Ideas list */}
       <div className="space-y-2">
+        {filtered.length === 0 && (
+          <div className="glass-panel p-5 text-center">
+            <p className="text-gray-500 text-sm">No ideas matching this filter.</p>
+          </div>
+        )}
         {filtered.map((idea) => {
           const score = totalScore(idea.scores)
           const isExpanded = expandedId === idea.id
@@ -130,11 +149,13 @@ export default function IdeaInbox({ ideas }: Props) {
                       {idea.status}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-400 mt-1 line-clamp-1">{idea.description}</p>
+                  {idea.description && (
+                    <p className="text-sm text-gray-400 mt-1 line-clamp-1">{idea.description}</p>
+                  )}
                 </div>
 
                 <svg
-                  className={`w-4 h-4 text-gray-500 transition-transform shrink-0 mt-1 ${isExpanded ? 'rotate-180' : ''}`}
+                  className={`w-4 h-4 text-gray-500 transition-transform duration-300 shrink-0 mt-1 ${isExpanded ? 'rotate-180' : ''}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -145,49 +166,73 @@ export default function IdeaInbox({ ideas }: Props) {
 
               {/* Expanded content */}
               {isExpanded && (
-                <div className="px-4 pb-4 border-t border-stark-600/50 pt-3 space-y-4">
+                <div className="px-4 pb-4 border-t border-stark-600/50 pt-3 space-y-4" onClick={(e) => e.stopPropagation()}>
+                  {/* Description */}
+                  {idea.description && (
+                    <p className="text-sm text-gray-300 leading-relaxed">{idea.description}</p>
+                  )}
+
+                  {/* Status */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-gray-500 uppercase tracking-wider">Status:</span>
+                    <span className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wider font-medium ${statusColors[idea.status]}`}>
+                      {idea.status}
+                    </span>
+                  </div>
+
                   {/* Score breakdown */}
-                  <div className="space-y-1.5">
-                    {Object.entries(idea.scores).map(([key, value]) => (
-                      <ScoreBar key={key} label={scoreLabels[key] || key} value={value} />
-                    ))}
+                  <div>
+                    <span className="text-[10px] uppercase text-arc tracking-wider font-semibold">Score Breakdown</span>
+                    <div className="space-y-1.5 mt-2">
+                      {Object.entries(idea.scores).map(([key, value]) => (
+                        <ScoreBar key={key} label={scoreLabels[key] || key} value={value} />
+                      ))}
+                    </div>
                   </div>
 
                   {/* Pros & Cons */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <span className="text-[10px] uppercase text-success tracking-wider font-semibold">Pros</span>
-                      <ul className="mt-1 space-y-0.5">
-                        {idea.pros.map((p, i) => (
-                          <li key={i} className="text-xs text-gray-300 flex items-start gap-1.5">
-                            <span className="text-success mt-0.5">+</span> {p}
-                          </li>
-                        ))}
-                      </ul>
+                  {((idea.pros && idea.pros.length > 0) || (idea.cons && idea.cons.length > 0)) && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {idea.pros && idea.pros.length > 0 && (
+                        <div>
+                          <span className="text-[10px] uppercase text-success tracking-wider font-semibold">Pros</span>
+                          <ul className="mt-1 space-y-0.5">
+                            {idea.pros.map((p, i) => (
+                              <li key={i} className="text-xs text-gray-300 flex items-start gap-1.5">
+                                <span className="text-success mt-0.5">+</span> {p}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                      {idea.cons && idea.cons.length > 0 && (
+                        <div>
+                          <span className="text-[10px] uppercase text-danger tracking-wider font-semibold">Cons</span>
+                          <ul className="mt-1 space-y-0.5">
+                            {idea.cons.map((c, i) => (
+                              <li key={i} className="text-xs text-gray-300 flex items-start gap-1.5">
+                                <span className="text-danger mt-0.5">-</span> {c}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                    <div>
-                      <span className="text-[10px] uppercase text-danger tracking-wider font-semibold">Cons</span>
-                      <ul className="mt-1 space-y-0.5">
-                        {idea.cons.map((c, i) => (
-                          <li key={i} className="text-xs text-gray-300 flex items-start gap-1.5">
-                            <span className="text-danger mt-0.5">-</span> {c}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
+                  )}
 
                   {/* Next steps */}
-                  <div>
-                    <span className="text-[10px] uppercase text-arc tracking-wider font-semibold">Next Steps</span>
-                    <ul className="mt-1 space-y-0.5">
-                      {idea.nextSteps.map((s, i) => (
-                        <li key={i} className="text-xs text-gray-300 flex items-start gap-1.5">
-                          <span className="text-arc mt-0.5">→</span> {s}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {idea.nextSteps && idea.nextSteps.length > 0 && (
+                    <div>
+                      <span className="text-[10px] uppercase text-arc tracking-wider font-semibold">Next Steps</span>
+                      <ul className="mt-1 space-y-0.5">
+                        {idea.nextSteps.map((s, i) => (
+                          <li key={i} className="text-xs text-gray-300 flex items-start gap-1.5">
+                            <span className="text-arc mt-0.5">→</span> {s}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

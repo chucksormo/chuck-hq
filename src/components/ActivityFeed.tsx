@@ -1,8 +1,8 @@
-import { useState } from 'react'
 import type { ActivityItem } from '../types'
 
 interface Props {
   items: ActivityItem[]
+  onReaction: (id: string, reaction: string | undefined) => Promise<void>
 }
 
 const typeIcons: Record<string, string> = {
@@ -24,28 +24,21 @@ const typeColors: Record<string, string> = {
 function timeAgo(timestamp: string): string {
   const now = new Date()
   const date = new Date(timestamp)
-  const hours = Math.floor((now.getTime() - date.getTime()) / 3600000)
-  if (hours < 1) return 'just now'
+  const diffMs = now.getTime() - date.getTime()
+  if (diffMs < 0) return 'just now'
+  const minutes = Math.floor(diffMs / 60000)
+  if (minutes < 1) return 'just now'
+  if (minutes < 60) return `${minutes}m ago`
+  const hours = Math.floor(minutes / 60)
   if (hours < 24) return `${hours}h ago`
   const days = Math.floor(hours / 24)
-  return `${days}d ago`
+  if (days < 7) return `${days}d ago`
+  const weeks = Math.floor(days / 7)
+  return `${weeks}w ago`
 }
 
-export default function ActivityFeed({ items }: Props) {
-  const [reactions, setReactions] = useState<Record<string, string | undefined>>(() => {
-    const initial: Record<string, string | undefined> = {}
-    items.forEach((item) => {
-      if (item.reaction) initial[item.id] = item.reaction
-    })
-    return initial
-  })
-
-  function setReaction(id: string, reaction: string) {
-    setReactions((prev) => ({
-      ...prev,
-      [id]: prev[id] === reaction ? undefined : reaction,
-    }))
-  }
+export default function ActivityFeed({ items, onReaction }: Props) {
+  const sorted = [...items].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
 
   return (
     <section className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
@@ -53,18 +46,24 @@ export default function ActivityFeed({ items }: Props) {
         <span className="text-lg">📋</span>
         <h2 className="section-title">Chuck's Activity</h2>
         <div className="flex-1 h-px bg-stark-600" />
+        <span className="text-xs font-[JetBrains_Mono] text-gray-500">{items.length} events</span>
       </div>
 
       <div className="space-y-2">
-        {items.map((item) => {
-          const currentReaction = reactions[item.id]
+        {sorted.length === 0 && (
+          <div className="glass-panel p-5 text-center">
+            <p className="text-gray-500 text-sm">No activity yet.</p>
+          </div>
+        )}
+        {sorted.map((item) => {
+          const currentReaction = item.reaction
           return (
             <div
               key={item.id}
-              className={`glass-panel p-4 border-l-2 transition-all hover:border-stark-500 ${typeColors[item.type]}`}
+              className={`glass-panel p-4 border-l-2 transition-all hover:border-stark-500 ${typeColors[item.type] || ''}`}
             >
               <div className="flex items-start gap-3">
-                <span className="text-base mt-0.5">{typeIcons[item.type]}</span>
+                <span className="text-base mt-0.5">{typeIcons[item.type] || '📌'}</span>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
@@ -84,7 +83,7 @@ export default function ActivityFeed({ items }: Props) {
                     ].map(({ key, emoji, label }) => (
                       <button
                         key={key}
-                        onClick={() => setReaction(item.id, key)}
+                        onClick={() => onReaction(item.id, currentReaction === key ? undefined : key)}
                         title={label}
                         className={`px-2 py-0.5 rounded-md text-xs transition-all ${
                           currentReaction === key

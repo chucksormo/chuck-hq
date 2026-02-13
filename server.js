@@ -1,7 +1,8 @@
 import express from 'express'
-import { readFileSync, writeFileSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { execSync } from 'child_process'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const DATA_DIR = join(__dirname, 'data')
@@ -10,7 +11,14 @@ const app = express()
 app.use(express.json())
 
 function readJSON(file) {
-  return JSON.parse(readFileSync(join(DATA_DIR, file), 'utf-8'))
+  const path = join(DATA_DIR, file)
+  if (!existsSync(path)) return file.endsWith('.json') ? [] : {}
+  try {
+    return JSON.parse(readFileSync(path, 'utf-8'))
+  } catch {
+    console.error(`Failed to parse ${file}, returning empty`)
+    return file.endsWith('.json') ? [] : {}
+  }
 }
 
 function writeJSON(file, data) {
@@ -75,7 +83,62 @@ app.put('/api/review', (req, res) => {
   res.json(req.body)
 })
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`)
+// --- Port handling with retry ---
+const BASE_PORT = Number(process.env.PORT) || 3001
+const MAX_PORT_RETRIES = 5
+
+function killProcessOnPort(port) {
+  try {
+    const pid = execSync(`lsof -ti tcp:${port}`, { encoding: 'utf-8' }).trim()
+    if (pid) {
+      console.log(`[Chuck HQ API] Killing stale process ${pid} on port ${port}`)
+      execSync(`kill -9 ${pid}`)
+      return true
+    }
+  } catch {
+    // No process on port — that's fine
+  }
+  return false
+}
+
+function startServer(port, attempt = 1) {
+  const server = app.listen(port, () => {
+    console.log(`[Chuck HQ API] Running on http://localhost:${port}`)
+  })
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`[Chuck HQ API] Port ${port} in use (attempt ${attempt}/${MAX_PORT_RETRIES})`)
+
+      // First attempt: try to kill the stale process and reuse the same port
+      if (attempt === 1 && killProcessOnPort(port)) {
+        console.log(`[Chuck HQ API] Retrying port ${port} after cleanup...`)
+        setTimeout(() => startServer(port, attempt + 1), 500)
+        return
+      }
+
+      // Subsequent attempts: try next port
+      if (attempt < MAX_PORT_RETRIES) {
+        const nextPort = port + 1
+        console.log(`[Chuck HQ API] Trying port ${nextPort}...`)
+        startServer(nextPort, attempt + 1)
+      } else {
+        console.error(`[Chuck HQ API] Could not find an available port after ${MAX_PORT_RETRIES} attempts. Exiting.`)
+        process.exit(1)
+      }
+    } else {
+      console.error('[Chuck HQ API] Server error:', err)
+      process.exit(1)
+    }
+  })
+}
+
+startServer(BASE_PORT)
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception:', err)
+})
+
+process.on('unhandledRejection', (err) => {
+  console.error('Unhandled rejection:', err)
 })

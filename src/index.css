@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-stark-900: #0a0e17;
+  --color-stark-800: #0f1623;
+  --color-stark-700: #151d2e;
+  --color-stark-600: #1c2640;
+  --color-stark-500: #243052;
+  --color-arc: #00d4ff;
+  --color-arc-dim: #00a0cc;
+  --color-arc-glow: #00d4ff40;
+  --color-amber: #f59e0b;
+  --color-amber-dim: #d97706;
+  --color-amber-glow: #f59e0b30;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-warning: #f59e0b;
+}
+
+@layer base {
+  body {
+    @apply bg-stark-900 text-gray-200 antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: theme(--color-stark-600);
+    border-radius: 3px;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px theme(--color-arc-glow), 0 0 40px theme(--color-arc-glow); }
+  50% { box-shadow: 0 0 30px theme(--color-arc-glow), 0 0 60px theme(--color-arc-glow); }
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.glass-panel {
+  @apply bg-stark-800/60 backdrop-blur-xl border border-stark-600/50 rounded-2xl;
+}
+
+.glow-border {
+  @apply border border-arc/20;
+  box-shadow: 0 0 15px theme(--color-arc-glow), inset 0 0 15px theme(--color-arc-glow);
+}
+
+.section-title {
+  @apply text-lg font-semibold tracking-wide uppercase text-arc;
+}

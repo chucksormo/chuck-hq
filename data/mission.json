@@ -1,0 +1,14 @@
+{
+  "phases": [
+    { "id": 1, "name": "Foundation", "description": "Build first revenue stream, establish AI workflows", "status": "completed", "progress": 100 },
+    { "id": 2, "name": "Traction", "description": "Launch products, validate with real users", "status": "active", "progress": 10 },
+    { "id": 3, "name": "Scale", "description": "Automate growth, multiply revenue channels", "status": "upcoming", "progress": 0 },
+    { "id": 4, "name": "Empire", "description": "Portfolio of AI-powered businesses", "status": "upcoming", "progress": 0 }
+  ],
+  "metrics": {
+    "daysToGoal": 847,
+    "activeProjects": 2,
+    "ideasInPipeline": 0,
+    "currentPhase": 2
+  }
+}

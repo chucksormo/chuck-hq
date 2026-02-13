@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "type": "code",
+    "title": "Built Chuck HQ dashboard",
+    "description": "Created full React + Vite + Tailwind dashboard with all 6 sections from the design brief.",
+    "timestamp": "2026-02-13T14:00:00"
+  },
+  {
+    "id": "2",
+    "type": "analysis",
+    "title": "Created Tony Stark Plan",
+    "description": "Outlined the full mission plan with phases: Foundation, Traction, Scale, Empire.",
+    "timestamp": "2026-02-13T12:00:00"
+  },
+  {
+    "id": "3",
+    "type": "research",
+    "title": "Set up idea scoring framework",
+    "description": "Established 7-dimension scoring framework: Moat, AI-Drift, Revenue, Passive, Speed, Fit, Glede.",
+    "timestamp": "2026-02-13T10:00:00"
+  },
+  {
+    "id": "4",
+    "type": "calendar",
+    "title": "Connected to Google Calendar",
+    "description": "Integrated Google Calendar for scheduling and focus block tracking.",
+    "timestamp": "2026-02-13T09:00:00"
+  }
+]

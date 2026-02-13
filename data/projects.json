@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "name": "HexaQuiz",
+    "description": "AI-powered quiz platform with adaptive learning",
+    "stage": "exploring",
+    "progress": 5,
+    "nextAction": "Push to GitHub repo",
+    "blockers": [],
+    "color": "#00d4ff"
+  },
+  {
+    "id": "2",
+    "name": "Chuck HQ",
+    "description": "This dashboard — our mission control center",
+    "stage": "building",
+    "progress": 80,
+    "nextAction": "Add backend persistence",
+    "blockers": [],
+    "color": "#f59e0b"
+  }
+]

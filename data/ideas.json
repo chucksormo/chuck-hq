@@ -2,7 +2,7 @@
   {
     "id": "1",
     "title": "AI Faktura/Regnskap for norske frilansere",
-    "description": "Drept. For tynt som standalone — Fiken har gratis fakturering. Ingen ekte moat, hvem som helst kan vibe-kode en faktura-generator. Regnskapssystem er for stort å bygge.",
+    "description": "Drept. For tynt som standalone — Fiken har gratis fakturering. Ingen ekte moat, hvem som helst kan vibe-kode en faktura-generator.",
     "status": "killed",
     "scores": {
       "moat": 1,
@@ -14,14 +14,14 @@
       "glede": 2
     },
     "pros": ["Norsk marked"],
-    "cons": ["Fiken har gratis fakturering", "Null moat — kan vibe-kodes av hvem som helst", "For tynt standalone, for stort som regnskapssystem"],
+    "cons": ["Fiken har gratis fakturering", "Null moat", "For tynt standalone"],
     "nextSteps": [],
     "createdAt": "2026-02-13T13:40:00"
   },
   {
     "id": "2",
     "title": "GymCrush — Gym Dating App",
-    "description": "Dating-app hvor du velger gym-senteret ditt og kan swipe på folk som trener der. Parked — dating app fatigue er real, vanskelig å få kritisk masse.",
+    "description": "Dating-app hvor du velger gym-senteret ditt og kan swipe på folk som trener der. Parked — dating app fatigue er real.",
     "status": "parked",
     "scores": {
       "moat": 4,
@@ -32,9 +32,123 @@
       "fit": 4,
       "glede": 5
     },
-    "pros": ["Viralt konsept", "Nettverkseffekt", "Uavhengig av gym-kjeder"],
-    "cons": ["Dating app fatigue", "Trenger kritisk masse", "Brutalt marked"],
+    "pros": ["Viralt konsept", "Nettverkseffekt"],
+    "cons": ["Dating app fatigue", "Trenger kritisk masse"],
     "nextSteps": [],
     "createdAt": "2026-02-13T15:06:00"
+  },
+  {
+    "id": "3",
+    "title": "HexaQuiz — Trivia-spill",
+    "description": "Hexagon-basert quiz-spill. Allerede prototypet og deployet. Venter på push til GitHub for vurdering.",
+    "status": "exploring",
+    "scores": {
+      "moat": 2,
+      "aiDriftbar": 4,
+      "revenue": 3,
+      "passiv": 4,
+      "speed": 5,
+      "fit": 5,
+      "glede": 5
+    },
+    "pros": ["Allerede prototypet", "Moro å lage", "Viral potensial"],
+    "cons": ["Spill-markedet er brutalt", "Monetisering usikkert", "Lav moat"],
+    "nextSteps": ["Push til GitHub", "Chuck vurderer moat/monetisering"],
+    "createdAt": "2026-02-13T15:06:00"
+  },
+  {
+    "id": "4",
+    "title": "NorskSEO — AI SEO-innhold for norske bedrifter",
+    "description": "AI-drevet SEO-verktøy som genererer norskspråklig innhold optimalisert for Google.no. Bloggposter, produktbeskrivelser, meta-tags. Norsk språk = naturlig moat. De fleste AI-tools er engelskfokuserte. Norske SMB-er trenger SEO men har ikke råd til byrå (15-30K/mnd). Subscription: 990-2990 kr/mnd.",
+    "status": "evaluating",
+    "scores": {
+      "moat": 4,
+      "aiDriftbar": 5,
+      "revenue": 4,
+      "passiv": 5,
+      "speed": 4,
+      "fit": 5,
+      "glede": 3
+    },
+    "pros": ["Norsk språk = sterk moat", "SMB-er MÅ ha SEO-innhold", "AI gjør 95% av jobben", "Recurring revenue", "Skalerer uten mer arbeid", "Norge har 600K+ bedrifter"],
+    "cons": ["Noen globale verktøy støtter norsk (Jasper, etc)", "Krever SEO-kunnskap for kvalitet", "Content saturation risk"],
+    "nextSteps": ["Valider: spør 10 norske SMB-eiere om SEO-pain", "Sjekk konkurrenter: finnes det noe norskfokusert?", "MVP: landing page + 5 eksempel-artikler"],
+    "createdAt": "2026-02-13T16:10:00"
+  },
+  {
+    "id": "5",
+    "title": "CompliancePilot — Norsk GDPR/cookie-compliance for SMB",
+    "description": "One-click compliance-verktøy for norske nettsider. Ny E-Com Act 2025 krever cookie-consent, personvernserklæring, og Datatilsynet-krav. Skanner nettside, genererer alt automatisk på norsk. Bøter opp til 4% av omsetning for brudd. Fear-based salg = sterk konvertering. 499-1499 kr/mnd.",
+    "status": "evaluating",
+    "scores": {
+      "moat": 3,
+      "aiDriftbar": 5,
+      "revenue": 4,
+      "passiv": 5,
+      "speed": 4,
+      "fit": 4,
+      "glede": 2
+    },
+    "pros": ["Regulatorisk press = demand driver", "Fear-based salg (4% bøter)", "Norsk lovgivning = naturlig moat", "Recurring SaaS", "Norge oppdaterte E-Com Act 2025 = timing"],
+    "cons": ["CookieYes, CookieHub etc finnes allerede", "Compliance er kjedelig", "Datatilsynet kan endre krav"],
+    "nextSteps": ["Research: hva mangler eksisterende løsninger for norske SMB?", "Valider pain via norske webdev-forum"],
+    "createdAt": "2026-02-13T16:10:00"
+  },
+  {
+    "id": "6",
+    "title": "ShipFast.no — Norsk SaaS Boilerplate/Starter Kit",
+    "description": "Ferdig kodembase for å lansere SaaS-produkter i Norge. Inkluderer: Vipps-betaling, norsk e-post templates, Altinn-integrasjon, SAF-T-export, norske juridiske docs. Engangskjøp 2990-4990 kr. Inspirert av ShipFast ($1M+ revenue). Norsk versjon finnes IKKE.",
+    "status": "evaluating",
+    "scores": {
+      "moat": 3,
+      "aiDriftbar": 3,
+      "revenue": 3,
+      "passiv": 5,
+      "speed": 3,
+      "fit": 5,
+      "glede": 4
+    },
+    "pros": ["Engangskjøp = enkel salg", "Norsk marked er underserved", "Fredrik kjenner norsk tech-stack", "Lav support-byrde", "Community-building potential"],
+    "cons": ["Engangskjøp = ikke recurring", "Krever vedlikehold av kodebase", "Lite marked (norske devs)"],
+    "nextSteps": ["Research: hvor mange norske SaaS-startups per år?", "Sjekk om noen norske alternativer finnes"],
+    "createdAt": "2026-02-13T16:10:00"
+  },
+  {
+    "id": "7",
+    "title": "ByggBot — AI Chatbot for norske håndverkere/byggefirma",
+    "description": "AI kundeservice-chatbot skreddersydd for norske håndverkere. Svarer på forespørsler, booker befaring, gir prisestimat. Håndverkere er notorisk dårlige på å svare kunder. Norsk språk + bransjekunnskap = moat. 990-1990 kr/mnd.",
+    "status": "evaluating",
+    "scores": {
+      "moat": 4,
+      "aiDriftbar": 5,
+      "revenue": 4,
+      "passiv": 4,
+      "speed": 3,
+      "fit": 4,
+      "glede": 3
+    },
+    "pros": ["Enormt pain point — håndverkere svarer aldri", "Norsk språk = moat", "Høy betalingsvillighet (sparer tid = penger)", "50K+ håndverkerbedrifter i Norge", "Kan selges via Mittanbud/Finn-partnerskap"],
+    "cons": ["Krever bransjespesifikk tuning", "Håndverkere er tech-skeptiske", "Salgsprosess kan være tung"],
+    "nextSteps": ["Snakk med 5 håndverkere om deres kundehåndtering", "MVP: enkel chatbot med booking-funksjon", "Test med én rørlegger/elektriker"],
+    "createdAt": "2026-02-13T16:10:00"
+  },
+  {
+    "id": "8",
+    "title": "AutoReply.no — AI E-post Assistent for norske bedrifter",
+    "description": "Chrome extension / e-post plugin som auto-genererer svar på norsk for kundehenvendelser. Lærer bedriftens tone, priser, FAQ. Plug-and-play for norske SMB-er som drukner i e-post. 299-799 kr/mnd per bruker.",
+    "status": "evaluating",
+    "scores": {
+      "moat": 3,
+      "aiDriftbar": 5,
+      "revenue": 4,
+      "passiv": 5,
+      "speed": 5,
+      "fit": 5,
+      "glede": 3
+    },
+    "pros": ["Chrome extension = rask å bygge", "Universell pain — alle SMB-er har e-post", "Norsk språk = differensiator", "Lett å demonstrere verdi", "Viral loop: ansatte anbefaler"],
+    "cons": ["Gmail har smart compose", "Mange globale konkurrenter", "Moat er tynnere enn det ser ut"],
+    "nextSteps": ["Prototype: Chrome extension med Claude API", "Test på reelle norske kundehenvendelser"],
+    "createdAt": "2026-02-13T16:10:00"
   }
 ]
